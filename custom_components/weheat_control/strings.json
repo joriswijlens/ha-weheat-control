@@ -1,14 +1,22 @@
 {
   "config": {
     "step": {
+      "reauth_confirm": {
+        "title": "Weheat login failed",
+        "description": "Enter the new password for {username}.",
+        "data": { "password": "Password" }
+      },
       "user": {
         "title": "Weheat portal",
         "description": "Unofficial. Uses your Weheat portal account.",
         "data": { "username": "Email", "password": "Password" }
       }
     },
-    "error": { "invalid_auth": "Login rejected" },
-    "abort": { "already_configured": "Account already configured" }
+    "error": { "invalid_auth": "Login rejected", "cannot_connect": "Cannot reach the Weheat portal" },
+    "abort": {
+      "already_configured": "Account already configured",
+      "reauth_successful": "Password updated"
+    }
   },
   "entity": {
     "switch": { "dhw_schedule": { "name": "Hot water schedule" } },
