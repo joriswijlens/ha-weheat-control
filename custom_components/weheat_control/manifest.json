@@ -1,0 +1,11 @@
+{
+  "domain": "weheat_control",
+  "name": "Weheat Control",
+  "codeowners": ["@joriswijlens"],
+  "config_flow": true,
+  "documentation": "https://github.com/joriswijlens/weheat-control",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "requirements": ["weheat-control @ git+https://github.com/joriswijlens/weheat-control@main"],
+  "version": "0.1.0"
+}

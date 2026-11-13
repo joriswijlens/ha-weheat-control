@@ -1,0 +1,9 @@
+boost_dhw:
+  fields:
+    minutes:
+      default: 60
+      selector:
+        number:
+          min: 15
+          max: 720
+          unit_of_measurement: min

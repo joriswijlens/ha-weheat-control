@@ -1,0 +1,24 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Weheat portal",
+        "description": "Unofficial. Uses your Weheat portal account.",
+        "data": { "username": "Email", "password": "Password" }
+      }
+    },
+    "error": { "invalid_auth": "Login rejected" },
+    "abort": { "already_configured": "Account already configured" }
+  },
+  "entity": {
+    "switch": { "dhw_schedule": { "name": "Hot water schedule" } },
+    "number": { "dhw_target_temperature": { "name": "Hot water target temperature" } }
+  },
+  "services": {
+    "boost_dhw": {
+      "name": "Boost hot water",
+      "description": "Heat the tank now for the given number of minutes.",
+      "fields": { "minutes": { "name": "Minutes", "description": "Boost duration." } }
+    }
+  }
+}
