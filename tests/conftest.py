@@ -8,7 +8,6 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.weheat_control.const import DOMAIN
 
 C = "custom_components.weheat_control.coordinator"
-TOKENS = {"access_token": "tok", "refresh_token": "ref", "expires_in": 300}
 
 
 @pytest.fixture(autouse=True)
@@ -27,8 +26,9 @@ def entry():
 
 @pytest.fixture
 def login():
-    with patch(f"{C}.login", return_value=dict(TOKENS)) as m:
-        yield m
+    with patch(f"{C}.PortalSession") as m:
+        m.return_value.access_token.return_value = "tok"
+        yield m.return_value.access_token
 
 
 @pytest.fixture

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import time
 
 import requests
 from homeassistant.config_entries import ConfigEntry
@@ -18,9 +17,8 @@ from weheat_control import (
     HeatPumpSettings,
     InstallationDiscovery,
     InstallationSettingsDto,
-    login,
+    PortalSession,
 )
-from weheat_control.auth import refresh
 
 from .const import DOMAIN, UPDATE_INTERVAL
 
@@ -40,29 +38,21 @@ class WeheatControlCoordinator(DataUpdateCoordinator[InstallationSettingsDto]):
         super().__init__(
             hass, _LOGGER, config_entry=entry, name=DOMAIN, update_interval=UPDATE_INTERVAL
         )
-        self._tokens: dict | None = None
+        self._session: PortalSession | None = None
 
     async def async_access_token(self) -> str:
-        """A valid access token; refresh or log in again when it has expired."""
-        if self._tokens and self._tokens["expires_at"] > time.time() + 30:
-            return self._tokens["access_token"]
-
-        tokens = None
+        """A valid access token: cached, renewed from the portal session, or a new login."""
+        if self._session is None:
+            self._session = PortalSession()
+        data = self.config_entry.data
         try:
-            if self._tokens:
-                tokens = await self.hass.async_add_executor_job(refresh, self._tokens)
-            if not tokens:
-                data = self.config_entry.data
-                tokens = await self.hass.async_add_executor_job(
-                    login, data[CONF_USERNAME], data[CONF_PASSWORD]
-                )
+            return await self.hass.async_add_executor_job(
+                self._session.access_token, data[CONF_USERNAME], data[CONF_PASSWORD]
+            )
         except requests.RequestException as err:
             raise UpdateFailed(f"cannot reach the Weheat portal: {err}") from err
         except RuntimeError as err:
             raise ConfigEntryAuthFailed(str(err)) from err
-        tokens["expires_at"] = time.time() + tokens.get("expires_in", 300)
-        self._tokens = tokens
-        return tokens["access_token"]
 
     async def async_setup(self) -> None:
         """Find the heat pump; called once before the first refresh."""

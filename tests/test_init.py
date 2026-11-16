@@ -61,14 +61,16 @@ async def test_unload_removes_service(hass, entry, login, pump):
 
 
 async def test_bad_credentials_start_reauth(hass, entry):
-    with patch(f"{C}.login", side_effect=RuntimeError("login rejected")):
+    with patch(f"{C}.PortalSession") as session:
+        session.return_value.access_token.side_effect = RuntimeError("login rejected")
         await setup(hass, entry)
     assert entry.state is ConfigEntryState.SETUP_ERROR
     assert any(hass.config_entries.flow.async_progress_by_handler(DOMAIN))
 
 
 async def test_portal_down_retries(hass, entry):
-    with patch(f"{C}.login", side_effect=requests.ConnectionError):
+    with patch(f"{C}.PortalSession") as session:
+        session.return_value.access_token.side_effect = requests.ConnectionError
         await setup(hass, entry)
     assert entry.state is ConfigEntryState.SETUP_RETRY
 

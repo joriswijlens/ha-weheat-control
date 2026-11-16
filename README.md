@@ -25,7 +25,7 @@ Requires Home Assistant 2026.2 or newer.
 ```
 uv venv --python 3.13 .venv
 uv pip install --python .venv/bin/python pytest-homeassistant-custom-component \
-  "weheat-control @ git+https://github.com/joriswijlens/weheat-control@3499aed"
+  "weheat-control @ git+https://github.com/joriswijlens/weheat-control@v0.1.1"
 .venv/bin/python -m pytest
 ```
 
