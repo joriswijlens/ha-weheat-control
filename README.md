@@ -9,7 +9,6 @@ undocumented portal endpoints and can break at any time. Runs next to the offici
 
 - Switch: hot water schedule on/off
 - Number: hot water target temperature (40-60 °C)
-- Service `weheat_control.boost_dhw` (`minutes`, default 60, max 720): heat the tank now
 
 ## Install
 

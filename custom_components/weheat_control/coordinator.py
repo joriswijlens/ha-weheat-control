@@ -91,10 +91,3 @@ class WeheatControlCoordinator(DataUpdateCoordinator[InstallationSettingsDto]):
         except (ApiException, UpdateFailed) as err:
             raise HomeAssistantError(f"Weheat rejected the change: {err}") from err
         await self.async_request_refresh()
-
-    async def async_boost_dhw(self, minutes: int) -> None:
-        try:
-            await self.pump.async_boost_dhw(await self.async_access_token(), minutes=minutes)
-        except (ApiException, UpdateFailed) as err:
-            raise HomeAssistantError(f"Weheat rejected the boost: {err}") from err
-        await self.async_request_refresh()

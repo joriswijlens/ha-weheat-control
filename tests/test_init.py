@@ -1,9 +1,7 @@
 from unittest.mock import patch
 
-import pytest
 import requests
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.exceptions import HomeAssistantError
 from weheat_control import ApiException
 
 from custom_components.weheat_control.const import DOMAIN
@@ -39,25 +37,10 @@ async def test_switch_and_number_write(hass, entry, login, pump):
     pump.async_set_settings.assert_awaited_with("tok", {"DhwTargetTemperature": 55})
 
 
-async def test_boost_service(hass, entry, login, pump):
-    await setup(hass, entry)
-    await hass.services.async_call(DOMAIN, "boost_dhw", {"minutes": 30}, blocking=True)
-    pump.async_boost_dhw.assert_awaited_with("tok", minutes=30)
-    await hass.services.async_call(DOMAIN, "boost_dhw", {}, blocking=True)
-    pump.async_boost_dhw.assert_awaited_with("tok", minutes=60)
-
-
-async def test_write_failure_is_a_service_error(hass, entry, login, pump):
-    await setup(hass, entry)
-    pump.async_boost_dhw.side_effect = ApiException(500, "boom")
-    with pytest.raises(HomeAssistantError):
-        await hass.services.async_call(DOMAIN, "boost_dhw", {}, blocking=True)
-
-
-async def test_unload_removes_service(hass, entry, login, pump):
+async def test_unload(hass, entry, login, pump):
     await setup(hass, entry)
     await hass.config_entries.async_unload(entry.entry_id)
-    assert not hass.services.has_service(DOMAIN, "boost_dhw")
+    assert entry.state is ConfigEntryState.NOT_LOADED
 
 
 async def test_bad_credentials_start_reauth(hass, entry):

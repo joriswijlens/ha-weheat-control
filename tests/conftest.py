@@ -40,7 +40,6 @@ def pump():
     instance = MagicMock()
     instance.async_get_settings = AsyncMock(return_value=settings)
     instance.async_set_settings = AsyncMock()
-    instance.async_boost_dhw = AsyncMock()
     with (
         patch(f"{C}.InstallationDiscovery.async_discover", AsyncMock(return_value=[info])),
         patch(f"{C}.HeatPumpSettings", return_value=instance),
