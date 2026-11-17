@@ -6,6 +6,6 @@
   "documentation": "https://github.com/joriswijlens/weheat-control",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "requirements": ["weheat-control @ git+https://github.com/joriswijlens/weheat-control@v0.1.1"],
+  "requirements": ["weheat-control @ git+https://github.com/joriswijlens/weheat-control@v0.1.2"],
   "version": "0.1.0"
 }
